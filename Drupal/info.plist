@@ -7,7 +7,7 @@
 	<key>category</key>
 	<string>SCRIPTS</string>
 	<key>command</key>
-	<string>DRUSH_PATH="/usr/bin/drush"
+	<string>DRUSH_PATH="/usr/local/bin/drush"
 
 #arg handling in alfred sucks, lets split it up
 query="{query}"
@@ -30,7 +30,8 @@ check() {
 
 case "$1" in
   d)
-    DRUSH_PATH $@
+    shift
+    ${DRUSH_PATH} $@
     ;;
   g)
     #echo "group"
