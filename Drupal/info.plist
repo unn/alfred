@@ -22,7 +22,7 @@ gotodo() {
 }
 
 check() {
-  if ! [[ $2 =~ ^[0-9]+$ ]] ; then
+  if ![[ $nid =~ ^[0-9]+$ ]] ; then
     echo "No NID"
     exit 1
   fi
@@ -33,23 +33,26 @@ case "$1" in
     DRUSH_PATH $@
     ;;
   g)
+    #echo "group"
     check
     proj="node"
     site="groups."
-    nid=$2
+    nid=${2}
     gotodo
     ;;
   m|t|p)
+    #echo "proj"
     proj="project"
     site=""
     nid=$2
     gotodo
     ;;
   *)
+    #echo "default"
     check
     proj="node"
     site=""
-    nid=$2\
+    nid=$1
     gotodo
     ;;
 esac
@@ -75,7 +78,7 @@ exit 0
 	<key>logging</key>
 	<true/>
 	<key>silent</key>
-	<true/>
+	<false/>
 	<key>subtitle</key>
 	<string></string>
 	<key>title</key>
