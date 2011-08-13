@@ -7,14 +7,55 @@
 	<key>category</key>
 	<string>SCRIPTS</string>
 	<key>command</key>
-	<string>#arg handling in alfred sucks, lets split it up
+	<string>DRUSH_PATH="/usr/bin/drush"
+
+#arg handling in alfred sucks, lets split it up
 query="{query}"
 IFS=" "
 set -- $query
 
-if [[ $1 =~ ^[0-9]+$ ]] ; then
-  open http://drupal.org/node/{query}
-fi</string>
+proj=''
+site=''
+
+gotodo() {
+  open http://${site}drupal.org/${proj}/${nid}
+}
+
+check() {
+  if ! [[ $2 =~ ^[0-9]+$ ]] ; then
+    echo "No NID"
+    exit 1
+  fi
+}
+
+case "$1" in
+  d)
+    DRUSH_PATH $@
+    ;;
+  g)
+    check
+    proj="node"
+    site="groups."
+    nid=$2
+    gotodo
+    ;;
+  m|t|p)
+    proj="project"
+    site=""
+    nid=$2
+    gotodo
+    ;;
+  *)
+    check
+    proj="node"
+    site=""
+    nid=$2\
+    gotodo
+    ;;
+esac
+
+exit 0
+</string>
 	<key>escapequery</key>
 	<false/>
 	<key>escapequerybackquotes</key>
@@ -26,7 +67,7 @@ fi</string>
 	<key>escapequerysemicolons</key>
 	<true/>
 	<key>growloutput</key>
-	<false/>
+	<true/>
 	<key>growloutputsticky</key>
 	<false/>
 	<key>keyword</key>
