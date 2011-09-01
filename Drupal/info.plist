@@ -22,9 +22,10 @@ gotodo() {
 }
 
 check() {
-  if ![[ $nid =~ ^[0-9]+$ ]] ; then
-    echo "No NID"
-    exit 1
+  if [[ "$nid" =~ ^[0-9]+$ ]] ; then
+    return 0
+  else
+    return 1
   fi
 }
 
@@ -35,10 +36,10 @@ case "$1" in
     ;;
   g)
     #echo "group"
+    nid=${2}
     check
     proj="node"
     site="groups."
-    nid=${2}
     gotodo
     ;;
   m|t|p)
@@ -50,10 +51,13 @@ case "$1" in
     ;;
   *)
     #echo "default"
-    check
-    proj="node"
-    site=""
     nid=$1
+    site=""
+    if check; then
+      proj="node"
+    else
+      proj="project"
+    fi
     gotodo
     ;;
 esac
