@@ -38,6 +38,12 @@ case "$1" in
     nid=$2
     gotodo
     ;;
+  a*)
+    proj="api/search/${1:1}"
+    site="api."
+    nid=$2
+    gotodo
+    ;;
   *)
     nid=$1
     site=""
