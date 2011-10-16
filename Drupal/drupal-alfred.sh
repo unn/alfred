@@ -25,6 +25,15 @@ case "$1" in
     shift
     ${DRUSH_PATH} $@
     ;;
+  o)
+    shift
+    uri=`${DRUSH_PATH} $@ status | grep 'Site URI' | tr -d ' ' | tr -d '\r'`
+    if [ $uri ] ; then
+      open "http://${uri:8}"
+    else
+      echo "Invalid alias: $1"
+    fi
+    ;;
   g)
     nid=$2
     check
