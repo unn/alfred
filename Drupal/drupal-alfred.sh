@@ -25,6 +25,11 @@ case "$1" in
     shift
     ${DRUSH_PATH} $@
     ;;
+  s)
+    proj="search/apachesolr_multisitesearch"
+    nid=$2
+    gotodo
+    ;;
   o)
     shift
     uri=`${DRUSH_PATH} $@ status | grep 'Site URI' | tr -d ' ' | tr -d '\r'`
