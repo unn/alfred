@@ -52,6 +52,9 @@ case "$1" in
     nid=$2
     gotodo
     ;;
+  u)
+    open http://dgo.to/@${2}
+    ;;
   a*)
     proj="api/search/${1:1}"
     site="api."
