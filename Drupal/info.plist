@@ -8,6 +8,8 @@
 	<string>SCRIPTS</string>
 	<key>command</key>
 	<string>. "`pwd`"/drupal-alfred.sh {query}</string>
+	<key>disabled</key>
+	<false/>
 	<key>escapequery</key>
 	<false/>
 	<key>escapequerybackquotes</key>
@@ -26,6 +28,8 @@
 	<string>d</string>
 	<key>logging</key>
 	<true/>
+	<key>parameter</key>
+	<integer>2</integer>
 	<key>silent</key>
 	<true/>
 	<key>subtitle</key>

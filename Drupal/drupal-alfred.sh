@@ -8,8 +8,15 @@ DRUSH_PATH="/usr/local/bin/drush"
 proj=''
 site=''
 
+# kind of a hack here to test if we're testing so we can do string comparisions.
+if [ -n "${ROUNDUP_VERSION+1}"] ; then
+  command=open
+else
+  command=echo
+fi
+
 gotodo() {
-  open http://${site}drupal.org/${proj}/${nid}
+  $command "http://${site}drupal.org/${proj}/${nid}"
 }
 
 check() {
@@ -20,24 +27,43 @@ check() {
   fi
 }
 
+help() {
+    cat <<EOF
+USAGE: Invoke Alfred
+d [dsogmtpua] [expression]
+
+DESCRIPTION
+d - drush (requires site aliases)
+s - search Drupal.org
+o - open (requires site aliases)
+g - open a node on groups.drupal.org
+m|t|p - open a module, theme or project page on Drupal.org
+u - open a user page on Drupal.org
+a6 - open an api page on Drupal.org for Drupal 6
+a7 - open an api page on Drupal.org for Drupal 7
+no arg - makes a best guess if you want a node or a project on Drupal.org
+
+EOF
+}
+
 case "$1" in
   d)
     shift
     ${DRUSH_PATH} $@
     ;;
+  o)
+    shift
+    uri=$(${DRUSH_PATH} $@ status | grep 'Site URI' | tr -d ' ' | tr -d '\r')
+    if [ $uri ] ; then
+      $command "http://${uri:8}"
+    else
+      echo "Invalid alias: $1"
+    fi
+    ;;
   s)
     proj="search/apachesolr_multisitesearch"
     nid=$2
     gotodo
-    ;;
-  o)
-    shift
-    uri=`${DRUSH_PATH} $@ status | grep 'Site URI' | tr -d ' ' | tr -d '\r'`
-    if [ $uri ] ; then
-      open "http://${uri:8}"
-    else
-      echo "Invalid alias: $1"
-    fi
     ;;
   g)
     nid=$2
@@ -53,7 +79,7 @@ case "$1" in
     gotodo
     ;;
   u)
-    open http://dgo.to/@${2}
+    $command http://dgo.to/@${2}
     ;;
   a*)
     proj="api/search/${1:1}"
@@ -64,6 +90,10 @@ case "$1" in
   *)
     nid=$1
     site=""
+    if [$nid == ''] ; then
+     help
+     exit
+    fi
     if check; then
       proj="node"
     else
