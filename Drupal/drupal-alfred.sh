@@ -81,7 +81,7 @@ case "$1" in
   u)
     $command http://dgo.to/@${2}
     ;;
-  a*)
+  a?)
     proj="api/search/${1:1}"
     site="api."
     nid=$2
